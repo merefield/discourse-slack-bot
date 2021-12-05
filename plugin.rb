@@ -15,25 +15,31 @@ enabled_site_setting :slack_bot_enabled
 after_initialize do
 
   %w[
-    ../lib/engine.rb
     ../lib/bot.rb
-    ../lib/bot_commands.rb
-    ../lib/discourse_events_handlers.rb
-    ../lib/slack_events_handlers.rb
+    ../commands/calculate.rb
+    ../commands/pong.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
 
-  bot_thread = Thread.new do
-    begin
-      ::SlackBot::Bot.run_bot
-    rescue Exception => ex
-      Rails.logger.error("Discord Bot: There was a problem: #{ex}")
-    end
-  end
+  #../lib/discourse_events_handlers.rb
+  #../lib/slack_events_handlers.rb
 
-  STDERR.puts '------------------------------------------------'
-  STDERR.puts 'Bot should now be spawned, say "Ping!" on Slack!'
-  STDERR.puts '------------------------------------------------'
-  STDERR.puts '(------      If not check logs          -------)'
+
+  if slack_bot_enabled
+    Thread.abort_on_exception = true
+
+    bot_thread = Thread.new do
+      begin
+        ::SlackBot::Bot.run_bot
+      rescue Exception => ex
+        Rails.logger.error("Slack Bot: There was a problem: #{ex}")
+      end
+    end
+
+    STDERR.puts '------------------------------------------------'
+    STDERR.puts 'Bot should now be spawned, say "Ping!" on Slack!'
+    STDERR.puts '------------------------------------------------'
+    STDERR.puts '(------      If not check logs          -------)'
+  end
 end
