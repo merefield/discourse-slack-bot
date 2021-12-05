@@ -5,7 +5,40 @@
 # authors: Robert Barrow
 # url: https://github.com/merefield/discourse-slack-bot
 
-gem 'slack-ruby-bot'
+
+
+
+gem 'timers', '4.3.3', require: false
+gem 'fiber-local', '1.0.0', require: false
+gem 'console', '1.14.0', require: false
+
+gem 'protocol-http', '0.22.5', require: false
+gem 'protocol-hpack', '1.4.2', require: false
+gem 'protocol-http1', '0.14.2', require: false
+gem 'protocol-http2', '0.14.2', require: false
+
+gem 'async', '1.30.1', require: false
+gem 'async-pool', '0.3.9', require: false
+gem 'async-io', '1.32.2', require: false
+gem 'async-http', '0.56.5', require: false
+gem 'protocol-websocket', '0.7.5', require: false
+gem 'async-websocket', '0.19.0', require: false
+
+
+
+
+
+
+
+
+
+
+gem 'websocket-extensions', '0.1.5', require: false
+gem 'websocket-driver', '0.7.5', require: false
+gem 'gli', '2.20.1', require: false
+gem 'faraday_middleware', '1.2.0', require: false
+gem 'slack-ruby-client', '0.17.0', require: false
+gem 'slack-ruby-bot', '0.16.1', require: false
 gem 'async-websocket', '~>0.8.0'
 
 require 'slack-ruby-bot'
@@ -26,7 +59,7 @@ after_initialize do
   #../lib/slack_events_handlers.rb
 
 
-  if slack_bot_enabled
+  if slack_bot_enabled && !slack_bot_token.blank?
     Thread.abort_on_exception = true
 
     bot_thread = Thread.new do
