@@ -9,8 +9,10 @@
 
 
 gem 'timers', '4.3.3', require: false
-gem 'fiber-local', '1.0.0', require: false
-gem 'console', '1.14.0', require: false
+# gem 'fiber-local', '1.0.0', require: false
+# #gem 'console', '1.14.0', require: false
+
+# gem 'console', :git => 'https://github.com/merefield/console.git'
 
 gem 'protocol-http', '0.22.5', require: false
 gem 'protocol-hpack', '1.4.2', require: false
@@ -23,17 +25,23 @@ gem 'async-pool', '0.3.9', require: false
 gem 'async-io', '1.32.2', require: false
 gem 'async-http', '0.56.5', require: false
 
-gem 'async-websocket', '0.19.0', require: false
-
-
+# gem 'async-websocket', '0.19.0', require: false
 gem 'websocket-extensions', '0.1.5', require: false
 gem 'websocket-driver', '0.7.5', require: false
+
+gem 'async-websocket', '0.8.0', require: false
+
+# gem 'websocket-extensions', '0.1.5', require: false
+
+
+# gem 'websocket-driver', '0.7.5', require: false
+
 gem 'gli', '2.20.1', require: false
 gem 'faraday_middleware', '1.2.0', require: false
 gem 'slack-ruby-client', '0.17.0', require: false
-gem 'slack-ruby-bot', '0.16.1', require: false
+gem 'slack-ruby-bot', '0.16.1'
 
-require 'slack-ruby-bot'
+# require 'slack-ruby-bot'
 
 enabled_site_setting :slack_bot_enabled
 
@@ -43,6 +51,7 @@ after_initialize do
     ../lib/bot.rb
     ../commands/calculate.rb
     ../commands/pong.rb
+    ../commands/copy_message.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
@@ -56,10 +65,11 @@ after_initialize do
 
     bot_thread = Thread.new do
       begin
+      # byebug
         ::SlackBot::Bot.run_bot
       rescue Exception => ex
-        Rails.logger.error("Slack Bot: There was a problem: #{ex}")
-      end
+       Rails.logger.error("Slack Bot: There was a problem: #{ex}")
+     end
     end
 
     STDERR.puts '------------------------------------------------'

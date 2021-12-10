@@ -6,8 +6,23 @@ module SlackBot
     @@SlackBot = nil
 
     def self.init
+      require 'console/logger.rb'
+      
+      Slack.configure do |config|
+        config.token = SiteSetting.slack_bot_token
+      end
+
+      # byebug
+
+      Slack::RealTime::Client.configure do |config|
+        config.start_method = :rtm_connect
+      end
       @@SlackBot = SlackRubyBot::Server.new(token: SiteSetting.slack_bot_token, aliases: ['slackbot'])
-      @@SlackBot.start_async
+
+
+      # byebug
+      # @@SlackBot.start_async
+      @@SlackBot.run
       
       # @@DiscordBot.ready do |event|
       #   puts "Logged in as #{@@DiscordBot.profile.username} (ID:#{@@DiscordBot.profile.id}) | #{@@DiscordBot.servers.size} servers"
