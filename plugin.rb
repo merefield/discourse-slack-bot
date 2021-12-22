@@ -9,8 +9,8 @@
 
 
 gem 'timers', '4.3.3', require: false
-# gem 'fiber-local', '1.0.0', require: false
-# #gem 'console', '1.14.0', require: false
+gem 'fiber-local', '1.0.0', require: false
+gem 'console', '1.14.0', require: false
 
 # gem 'console', :git => 'https://github.com/merefield/console.git'
 
