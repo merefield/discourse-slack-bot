@@ -51,24 +51,20 @@ after_initialize do
     ../lib/bot.rb
     ../commands/calculate.rb
     ../commands/pong.rb
-    ../commands/copy_message.rb
+    ../commands/copy_history.rb
+    ../slack_events/copy_message.rb
   ].each do |path|
     load File.expand_path(path, __FILE__)
   end
-
-  #../lib/discourse_events_handlers.rb
-  #../lib/slack_events_handlers.rb
-
 
   if SiteSetting.slack_bot_enabled && !SiteSetting.slack_bot_token.blank?
     Thread.abort_on_exception = true
 
     bot_thread = Thread.new do
       begin
-      # byebug
         ::SlackBot::Bot.run_bot
       rescue Exception => ex
-       Rails.logger.error("Slack Bot: There was a problem: #{ex}")
+        Rails.logger.error("Slack Bot: There was a problem: #{ex}")
      end
     end
 

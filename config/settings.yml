@@ -5,9 +5,15 @@ plugins:
   slack_bot_token:
     default: ''
     client: false
+  slack_user_token:
+    default: ''
+    client: false
   slack_bot_auto_channel_sync:
     default: false
     client: false
   slack_bot_discourse_announcement_topic_id:
     default: ''
+    client: false
+  slack_bot_message_copy_topic_size_limit:
+    default: 100
     client: false

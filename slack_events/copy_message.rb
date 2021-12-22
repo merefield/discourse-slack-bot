@@ -7,19 +7,10 @@ class CopyMessageFromSlack < SlackRubyBot::Bot
 
   match /.*/ do |client, data, match|
 
-    # pp client
-    # pp client.users
-    #pp match
     connection_data = Discourse.cache.fetch(channel_cache_key(data.channel), expires_in: 1.hour) do
       web_client = Slack::Web::Client.new
       web_client.conversations_info(channel: "#{data.channel}")
     end
-    # mydata = web_client.conversations_info(channel: "#{data.channel}")
-    # pp "------------------------"
-    # pp mydata["channel"]["name"]
-    # pp "------------------------"
-    # pp data["user"]
-    # pp "------------------------"
 
     slack_user_id = data["user"]
     slack_message_text = data["text"]
@@ -35,13 +26,13 @@ class CopyMessageFromSlack < SlackRubyBot::Bot
     end
 
     if SiteSetting.slack_bot_auto_channel_sync
-      matching_category = Category.find_by(name: slack_channel_name)
+      matching_category = Category.find_by(name: slack_channel_name) || Category.find_by(name: slack_channel_name.capitalize)
       raw = slack_message_text
       unless matching_category.nil?
         if !(target_topic = Topic.find_by(title: I18n.t("slack_bot.slack_events.auto_message_copy.default_topic_title", slack_channel_name: matching_category.name))).nil?
           new_post = PostCreator.create!(posting_user, raw: raw, topic_id: target_topic.id, skip_validations: true)
         else
-          new_post = PostCreator.create!(posting_user, title: I18n.t("slack_bot.slack_events.auto_message_copy.default_topic_title", channel_name: matching_category.name), raw: raw, category: matching_category.id, skip_validations: true)
+          new_post = PostCreator.create!(posting_user, title: I18n.t("slack_bot.slack_events.auto_message_copy.default_topic_title", slack_channel_name: matching_category.name), raw: raw, category: matching_category.id, skip_validations: true)
         end
       else
         # Copy the message to the assigned Discourse announcement Topic if assigned in plugin settings

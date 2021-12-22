@@ -2,11 +2,15 @@
 # Slack bot class
 module SlackBot
   class Bot < SlackRubyBot::Bot
+    cattr_reader :SlackBot, :SlackClient
 
     @@SlackBot = nil
+    @@SlackClient = nil
 
     def self.init
       require 'console/logger.rb'
+
+      return if !@@SlackBot.nil?
       
       Slack.configure do |config|
         config.token = SiteSetting.slack_bot_token
@@ -17,7 +21,9 @@ module SlackBot
       Slack::RealTime::Client.configure do |config|
         config.start_method = :rtm_connect
       end
+
       @@SlackBot = SlackRubyBot::Server.new(token: SiteSetting.slack_bot_token, aliases: ['slackbot'])
+      @@SlackClient = Slack::Web::Client.new(token: SiteSetting.slack_user_token)
 
 
       # byebug

@@ -8,3 +8,18 @@ en:
     slack_events:
       auto_message_copy:
         default_topic_title: "slack #%{slack_channel_name} chats"
+    slack_commands:
+       copy_history:
+        description: "Copy across message history to Category of same name"
+        help: "Type: @<bot-name> copyhist <number-of-messages> <target-category-name> <target-topic-title>.  Only first parameter is mandatory"
+        discourse_topic_title: "#%{channel} Chats from Slack"
+        no_category_specified: "No target Category specified, so attempting to use current channel name to match a Discourse Category."
+        success:
+          found_matching_discourse_category: "SUCCESS: Found matching Discourse Category"
+          found_matching_discourse_topic: "SUCCESS: Found matching Discourse Topic"
+          final_outcome: "SUCCESS: Copied over %{count} past messages to Discourse!"
+        error:
+          unable_to_find_discourse_category: "ERROR: Unable to find matching Discourse Category, aborting command!"
+          unable_to_find_discourse_topic: "ERROR: Unable to find matching Discourse Topic in target Category, will create new!"
+          unable_to_determine_topic_id: "ERROR: Unable to determine a suitable Topic Id for Discourse!"
+          didnt_supply_integer_argument: "Please provide a positive integer for number of messages"
