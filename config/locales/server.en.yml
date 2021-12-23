@@ -1,9 +1,11 @@
 en:
   site_settings:
     slack_bot_enabled: "Enable the Discourse Slack Bot plugin"
-    slack_bot_token: "Enter your bot TOKEN from Slack here"
+    slack_bot_token: "Enter your Bot User OAuth TOKEN from Slack here"
+    slack_user_token: "Enter your User OAuth TOKEN from Slack here"
     slack_bot_auto_channel_sync: "Enable chat sync on identically named channels/Categories (takes precedence over Discourse Announcement Topic)"
     slack_bot_discourse_announcement_topic_id: "The id of your Discourse Announcement Topic (if slack auto channel sync is enabled and matching Category found this is suppressed)"
+    slack_bot_message_copy_topic_size_limit: "Message history copy: number of Slack messages per Discourse Topic"
   slack_bot:
     slack_events:
       auto_message_copy:
