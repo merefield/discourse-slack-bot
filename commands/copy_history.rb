@@ -26,13 +26,39 @@ module SlackBot
 
         destination_topic = nil
 
-        connection_data = Discourse.cache.fetch(channel_cache_key(data.channel), expires_in: 1.hour) do
-          web_client = Slack::Web::Client.new
-          web_client.conversations_info(channel: "#{data.channel}")
-        end
+        
+        past_messages = []
 
-        slack_channel_name = connection_data["channel"]["name"]
+        # web_client = Slack::Web::Client.new
+        
+        pp ::SlackBot::Bot.SlackClient
+        slack_channel_name = ::SlackBot::Bot.SlackClient.conversations_info(channel: "#{data.channel}")["channel"]["name"]
+        pp "-----------------"
         pp slack_channel_name
+        pp "-----------------"
+        
+        past_messages = ::SlackBot::Bot.SlackClient.conversations_history(channel: "#{data.channel}", limit: number_of_messages).messages
+
+        
+
+        # if number_of_past_messages.to_i <= HISTORY_CHUNK_LIMIT
+        #   past_messages += event.channel.history(number_of_past_messages.to_i, event.message.id)
+        #   pp past_messages
+        # else
+        #   number_of_messages_retrieved = 0
+        #   last_id = event.message.id
+        #   while number_of_messages_retrieved < number_of_past_messages.to_i
+        #     retrieve_this_time = number_of_past_messages.to_i - number_of_messages_retrieved > HISTORY_CHUNK_LIMIT ? HISTORY_CHUNK_LIMIT : number_of_past_messages.to_i - number_of_messages_retrieved
+        #     past_messages += event.channel.history(retrieve_this_time, last_id)
+        #     last_id = past_messages.last.id.to_i
+        #     number_of_messages_retrieved += retrieve_this_time
+        #   end
+        # end
+
+        #past_messages = client.conversations_history(channel: "#{data.channel}", limit: number_of_messages).messages
+
+
+        #pp slack_channel_name
 
         if target_category.nil?
           destination_category = Category.find_by(name: slack_channel_name) || Category.find_by(name: slack_channel_name.capitalize)
